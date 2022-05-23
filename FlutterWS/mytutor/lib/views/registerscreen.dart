@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mytutor/views/loginscreen.dart';
-//import 'package:ndialog/ndialog.dart';
 import '../constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -330,12 +329,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // ignore: unused_local_variable
   String base64Image = base64Encode(_image!.readAsBytesSync());
 
-  //FocusScope.of(context).unfocus();
-  //ProgressDialog progressDialog = ProgressDialog(context, 
-  //message: const Text("Registration in progress.."), 
-  //title: const Text("Registering..."));
-  //progressDialog.show();
-
   http.post(Uri.parse(CONSTANTS.server + "/mytutor/php/register_user.php"), 
   body: {
     "user_name": _name, 
@@ -357,7 +350,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         timeInSecForIosWeb: 1, 
         textColor: Colors.red,
         fontSize: 18.0); 
-       //progressDialog.dismiss(); 
         Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -371,7 +363,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           timeInSecForIosWeb: 1, 
           textColor: Colors.red,
           fontSize: 18.0); 
-         // progressDialog.dismiss(); 
           return;
     } 
 });
