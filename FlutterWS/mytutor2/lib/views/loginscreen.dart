@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mytutor2/constants.dart';
-import 'package:mytutor2/views/mainscreen.dart';
+import 'package:mytutor2/views/menuScreen.dart';
 import 'package:mytutor2/views/registerscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants.dart';
 import '../models/user.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -296,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (content) => MainScreen(user: user,))
+                  builder: (content) => MenuScreen(user: user,))
                     );
           }
           else{

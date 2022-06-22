@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mytutor2/constants.dart';
+import '../constants.dart';
 import '../models/tutor.dart';
 
 class TutorScreen extends StatefulWidget {
@@ -120,7 +122,7 @@ class _TutorScreenState extends State<TutorScreen> {
       Uri.parse(CONSTANTS.server + "/mytutor2/php/load_tutors.php"),
         body: {'pageno':pageno.toString()}).then((response) {
           var jsondata = jsonDecode(response.body);
-          print(jsondata);
+         // print(jsondata);
           if (response.statusCode == 200 && jsondata['status'] == 'success') {
             var extractdata = jsondata['data'];
             numofpage = int.parse(jsondata['numofpage']);
@@ -128,9 +130,9 @@ class _TutorScreenState extends State<TutorScreen> {
               tutorList = <Tutor>[];
               extractdata['tutors'].forEach((v) {
                 tutorList.add(Tutor.fromJson(v));
-              });
+              }); 
+              setState(() {});
             }
-          
           }
         });
   }
