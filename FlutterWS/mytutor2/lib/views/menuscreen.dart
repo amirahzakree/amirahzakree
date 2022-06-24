@@ -42,10 +42,6 @@ void onTap (int index){
   @override
   Widget build(BuildContext context) {
       return Scaffold(
-        appBar: AppBar(
-        title: const Text('MYTUTOR'),
-        backgroundColor: Colors.blueGrey[900],
-        ),
         body: Center (
           child: _widgetOptions.elementAt(currentIndex),
         ),

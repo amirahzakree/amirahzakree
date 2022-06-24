@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     screenWidth = MediaQuery.of(context).size.width;
 
     if(screenWidth<=600) {
-      ctrWidth = screenWidth;
+      ctrWidth = screenHeight;
     } 
     else {
       ctrWidth = screenWidth * 0.75;
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             "LOGIN",
                             style: TextStyle(
-                              fontSize: ctrWidth * 0.06,
+                              fontSize: ctrWidth * 0.04,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

@@ -5,6 +5,7 @@ class Subject {
   String? subjectName;
   String? subjectDescription;
   String? subjectPrice;
+  String? tutorId;
   String? subjectSessions;
   String? subjectRating;
 
@@ -13,6 +14,7 @@ class Subject {
       this.subjectName,
       this.subjectDescription,
       this.subjectPrice,
+      this.tutorId,
       this.subjectSessions,
       this.subjectRating});
 
@@ -21,6 +23,7 @@ class Subject {
     subjectName = json['subject_name'];
     subjectDescription = json['subject_description'];
     subjectPrice = json['subject_price'];
+    tutorId = json['tutor_id'];
     subjectSessions = json['subject_sessions'];
     subjectRating = json['subject_rating'];
   }
@@ -31,6 +34,7 @@ class Subject {
     data['subject_name'] = this.subjectName;
     data['subject_description'] = this.subjectDescription;
     data['subject_price'] = this.subjectPrice;
+    data['tutor_id'] = this.tutorId;
     data['subject_sessions'] = this.subjectSessions;
     data['subject_rating'] = this.subjectRating;
     return data;

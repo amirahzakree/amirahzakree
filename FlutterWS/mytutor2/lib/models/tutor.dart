@@ -8,15 +8,18 @@ class Tutor {
   String? tutorPassword;
   String? tutorDescription;
   String? tutorDatereg;
+  String? subjectName;
 
-  Tutor(
-      {this.tutorId,
+  Tutor({
+      this.tutorId,
       this.tutorEmail,
       this.tutorPhone,
       this.tutorName,
       this.tutorPassword,
       this.tutorDescription,
-      this.tutorDatereg});
+      this.tutorDatereg,
+      this.subjectName,
+      });
 
   Tutor.fromJson(Map<String, dynamic> json) {
     tutorId = json['tutor_id'];
@@ -26,6 +29,7 @@ class Tutor {
     tutorPassword = json['tutor_password'];
     tutorDescription = json['tutor_description'];
     tutorDatereg = json['tutor_datereg'];
+    subjectName = json['subject_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,6 +41,7 @@ class Tutor {
     data['tutor_password'] = this.tutorPassword;
     data['tutor_description'] = this.tutorDescription;
     data['tutor_datereg'] = this.tutorDatereg;
+    data['subject_name'] = this.subjectName;
     return data;
   }
 }
