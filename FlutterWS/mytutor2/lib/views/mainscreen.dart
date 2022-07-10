@@ -3,12 +3,16 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:mytutor2/views/cartscreen.dart';
 import '../constants.dart';
 import '../models/subject.dart';
+import '../models/user.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final User user;
+  const MainScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -20,13 +24,16 @@ class _MainScreenState extends State<MainScreen> {
   late double screenHeight, screenWidth, resWidth;
   var numofpage, curpage = 1;
   var color;
+  int cart = 0;
   TextEditingController searchSubCtrller = TextEditingController(); 
   String search ="";
 
     @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp){
     _loadSubject(1, search);
+    });
   }
 
   @override
@@ -47,9 +54,25 @@ class _MainScreenState extends State<MainScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              _loadSearchDialog();
-             },       
-            ),           
+              _loadSearchDialog();  
+            },    
+          ),
+          TextButton.icon(onPressed: () async {
+            await Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (content) => CartScreen(
+                            user: widget.user,)));
+                _loadSubject(1, search);
+                _loadMyCart();
+          },
+          icon: const Icon(
+            Icons.shopping_cart,
+            color: Colors.white,
+          ),
+          label: Text(widget.user.cart.toString(),
+          style: const TextStyle(color: Colors.white)),
+          )
         ],
       ),
       body: subjectList.isEmpty
@@ -70,9 +93,15 @@ class _MainScreenState extends State<MainScreen> {
           Expanded(
             child: GridView.count(
               crossAxisCount: 2,
+              childAspectRatio: 1/1,
               children:
                   List.generate(subjectList.length, (index) {
                     return Card(
+                     // color: Colors.tealAccent,
+                      color: const Color.fromARGB(171, 102, 156, 168),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        ),
                       child: Column(
                         children: [ 
                           Flexible(
@@ -91,14 +120,28 @@ class _MainScreenState extends State<MainScreen> {
                             flex: 4,
                             child: Column(
                               children: [
+                                Row (
+                              children: [
+                                Expanded (
+                                  flex: 7,
+                                  child: Column(children:[
                                 Text(subjectList[index].subjectName.toString()),
                                 Text("RM"+subjectList[index].subjectPrice.toString()),
                               ])
-                          )
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: IconButton(
+                              onPressed: () {
+                                _addtoCartDialog(index);
+                              },
+                              icon: const Icon(
+                                Icons.shopping_cart_rounded))),
                         ])
-                    );
+                  ]))]));
   }))
          ),
+          
                   SizedBox(
                     height: 30,
                     child: ListView.builder(
@@ -123,8 +166,8 @@ class _MainScreenState extends State<MainScreen> {
                         );
                       }
                     )
-                  )
-        ]
+                  ),
+                  ],
       ),
     );
   }
@@ -203,5 +246,100 @@ class _MainScreenState extends State<MainScreen> {
         );
       },
     );       
+  }
+  
+  void _addtoCart(int index) {
+     http.post(
+       Uri.parse(CONSTANTS.server + "/mytutor2/php/insert_cart.php"),
+       body: {
+         "email": widget.user.email.toString(),
+         "subid": subjectList[index].subjectId.toString(),
+       }).timeout(
+         const Duration (seconds: 5),
+         onTimeout: (){
+           return http.Response(
+             'Error', 408);
+         },
+       ).then((response) {
+         print(response.body);
+         var jsondata = jsonDecode(response.body);
+         if (response.statusCode == 200 && jsondata ['status'] == 'success'){
+           print(jsondata['data']['carttotal'].toString());
+           setState(() {
+             widget.user.cart = jsondata['data']['carttotal'].toString();
+           });
+         Fluttertoast.showToast(
+          msg: "Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+           timeInSecForIosWeb: 1,
+           fontSize: 16.0
+         );
+        }
+
+       });
+
+  }
+  
+  void _addtoCartDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            
+          title: const Text (
+            "ADD TO CART",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text ("Are you sure you want to add this subject?", style: TextStyle(fontSize: 18.0)),
+          actions: <Widget>[
+            TextButton (
+              child: const Text (
+                "YES",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _addtoCart(index);
+              },
+            ),
+            TextButton (
+              child: const Text(
+                "NO",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              onPressed: (){
+                Navigator.of(context).pop();
+              })
+          ]
+        );
+      }
+    );
+  }
+  
+  void _loadMyCart() {
+     http.post(
+        Uri.parse(CONSTANTS.server + "/mytutor2/php/load_mycartqty.php"),
+        body: {
+          "email": widget.user.email.toString(),
+        }).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    ).then((response) {
+      print(response.body);
+      var jsondata = jsonDecode(response.body);
+      if (response.statusCode == 200 && jsondata['status'] == 'success') {
+        print(jsondata['data']['carttotal'].toString());
+        setState(() {
+          widget.user.cart = jsondata['data']['carttotal'].toString();
+        });
+      }
+    });
+    
   }
 } 

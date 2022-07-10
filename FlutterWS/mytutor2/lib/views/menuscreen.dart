@@ -4,35 +4,42 @@ import 'package:mytutor2/views/mainscreen.dart';
 import 'package:mytutor2/views/tutorscreen.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({Key? key, required User user}) : super(key: key);
+  final User user;
+  const MenuScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  late final List _options;
   int currentIndex = 0;
 
   static const TextStyle optionStyle = 
         TextStyle(fontSize: 23, fontWeight: FontWeight.bold);
   
-  static const List<Widget> _widgetOptions = <Widget>[
-    MainScreen(),
-    TutorScreen(),
-    Text (
+  //static final List<Widget> _widgetOptions = <Widget>[
+    @override
+      void initState() {
+      super.initState();
+      _options = [
+    MainScreen(user: widget.user),
+    const TutorScreen(),
+    const Text (
       'Subscriptions',
       style: optionStyle,
     ),
-    Text (
+    const Text (
       'Favourite',
       style: optionStyle,
     ),
-    Text (
+    const Text (
       'My Profile',
       style: optionStyle,
     )
-  ];     
-
+      ];
+  //];     
+    }
 
 void onTap (int index){
   setState(() {
@@ -43,7 +50,7 @@ void onTap (int index){
   Widget build(BuildContext context) {
       return Scaffold(
         body: Center (
-          child: _widgetOptions.elementAt(currentIndex),
+          child: _options.elementAt(currentIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

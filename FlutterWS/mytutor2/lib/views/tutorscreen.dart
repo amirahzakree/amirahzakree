@@ -182,17 +182,17 @@ class _TutorScreenState extends State<TutorScreen> {
                 style: const TextStyle(
                   fontSize: 16, fontWeight: FontWeight.bold)
               ),
-              const SizedBox(height: 5), 
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text("Contact:  " + tutorList[index].tutorPhone.toString()),
-                const SizedBox(height: 10), 
-                Text("Email:  " + tutorList[index].tutorEmail.toString()),
-                const SizedBox(height: 10), 
-                Text("About Me:  " + tutorList[index].tutorDescription.toString()),
-                const SizedBox(height: 10), 
-                Text("Subject:  " + tutorList[index].subjectName.toString()),
-              ]
-              )
+              // const SizedBox(height: 5), 
+              // Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              //   Text("Contact:  " + tutorList[index].tutorPhone.toString()),
+              //   const SizedBox(height: 10), 
+              //   Text("Email:  " + tutorList[index].tutorEmail.toString()),
+              //   const SizedBox(height: 10), 
+              //   Text("About Me:  " + tutorList[index].tutorDescription.toString()),
+              //   const SizedBox(height: 10), 
+              //   Text("Subject:  " + tutorList[index].subjectName.toString()),
+              // ]
+             // )
           ],)),
         );
       }
